@@ -4,7 +4,7 @@
 #                                                                             
 # PROGRAMMER: Marlene Hirose
 # DATE CREATED: 2019-09-08                     
-# REVISED DATE: 2019-09-16
+# REVISED DATE: 2019-09-18
 # PURPOSE: Create the function get_pet_labels that creates the pet labels from 
 #          the image's filename. This function inputs: 
 #           - The Image Folder as image_dir within get_pet_labels function and 
@@ -48,22 +48,37 @@ def get_pet_labels(image_dir):
     results_dic = {}
 
     image_name = ""
+
     for image in dir_list:
 #         print(image)
         if not image.startswith("."):
-        # Make sure image name is all in lower case, replace underscores with spaces. Use rsplit otherwise will split after first space. We want
-        # split on last space
-            image_split = image.lower().replace('_', ' ').rsplit(None, 1)
-    #         print(image_split)
-    #     Don't want the latter half - the numbers and jpg suffix. So, just get the first half of the split
-    #         image_name = image_split
+        # Make sure image name is all in lower case, replace underscores with spaces. Use rsplit otherwise will split after first space. 
+#         Create list that will only exist in this if statement
+            image_list = []
+        # split on period to get rid of jpg extension
+            image_split_period = image.lower().split('.')
+
+#            get rid of jpg from list
+            image_split_period.pop()
+            no_digits = []
+        
+#            get rid of numbers
+            for elem in image_split_period:
+                for char in elem:
+                    if not char.isdigit():
+                        no_digits.append(char)
+                        
+#             replace underscores with spaces and strip whitespaces
+            image_name = ''.join(no_digits).replace( '_', ' ').strip(' ')         
+#             add image name to the list
+            image_list.append(image_name)
+#             insert image name into dictionary
             if image not in results_dic:
-                results_dic[image] = image_split
-    #           Only want the lable, not the numbers and jpg
-                results_dic[image].pop()
+                results_dic[image] = image_list
+
             else:
                 print("** Warning: Duplicate files exist in directory:", image)
-    #     print(results_dic)
+
             # Replace None with the results_dic dictionary that you created with this
             # function
 
